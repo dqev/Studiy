@@ -1,0 +1,31 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Cache directories
+.cache/
+.parcel-cache/
+.next/
+out/
+.vite/
+.turbo/
+
+# IDE cache
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+.thumbnail.db
+
+# Environment
+.env.local
+.env.*.local

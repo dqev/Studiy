@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Apply Google Sans as the default font family */
+@supports (font-family: "Google Sans") {
+    body {
+        font-family: "Google Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+}

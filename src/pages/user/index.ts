@@ -1,0 +1,9 @@
+export { UserDashboard } from './UserDashboard';
+export { UserProfile } from './UserProfile';
+export { UserResources } from './UserResources';
+export { UserUpload } from './UserUpload';
+export { UserPendingMaterial } from './UserPendingMaterial';
+export { UserSaved } from './UserSaved';
+export { UserNotification } from './UserNotification';
+export { UserSetting } from './UserSetting';
+export { SearchUser } from './SearchUser';
