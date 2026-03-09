@@ -443,8 +443,8 @@ export function CampusLostAndFinder() {
             {/* Items Grid */}
             {loading ? (
                 <SkeletonTheme baseColor="#f1f5f9" highlightColor="#e2e8f0">
-                    <div className="space-y-3">
-                        {[...Array(Math.max(filteredItems.length, 2))].map((_, i) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {[...Array(Math.max(filteredItems.length, 3))].map((_, i) => (
                             <SkeletonCard key={i} />
                         ))}
                     </div>
@@ -468,7 +468,7 @@ export function CampusLostAndFinder() {
                     </CardContent>
                 </Card>
             ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredItems.map(item => (
                         <div
                             key={item.id}
