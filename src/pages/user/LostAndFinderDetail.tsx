@@ -106,7 +106,7 @@ export function LostAndFinderDetail() {
 
     if (error || !item) {
         return (
-            <div className="w-full max-w-4xl mx-auto px-4 py-8">
+            <div className="w-full max-w-7xl mx-auto px-4 py-8">
                 <Card>
                     <CardContent className="pt-6">
                         <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -131,7 +131,7 @@ export function LostAndFinderDetail() {
     const isOwner = user?.email === item.uploaderEmail;
 
     return (
-        <div className="w-full max-w-4xl mx-auto px-4 py-8">
+        <div className="w-full max-w-7xl mx-auto px-2 py-6">
             {/* Back Button */}
             <button
                 onClick={() => navigate('/user/lost-and-finder')}
@@ -159,11 +159,11 @@ export function LostAndFinderDetail() {
                 <div className="lg:col-span-2">
                     {/* Image */}
                     <Card className="overflow-hidden mb-6">
-                        <div className="relative h-96 bg-slate-200">
+                        <div className="relative bg-slate-200 flex items-center justify-center">
                             <img
                                 src={item.imageUrl}
                                 alt={item.title}
-                                className="w-full h-full object-cover"
+                                className="w-full object-contain"
                             />
                             <div className="absolute top-4 left-4 flex gap-2">
                                 <Badge
@@ -269,7 +269,7 @@ export function LostAndFinderDetail() {
                 {/* Sidebar */}
                 <div className="lg:col-span-1">
                     {/* Contact Card */}
-                    <Card className="sticky top-4 mb-6">
+                    <Card className="mb-6">
                         <CardHeader>
                             <CardTitle className="text-lg">Contact Information</CardTitle>
                         </CardHeader>

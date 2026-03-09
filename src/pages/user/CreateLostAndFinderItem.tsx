@@ -188,7 +188,7 @@ export function CreateLostAndFinderItem() {
     };
 
     return (
-        <div className="p-6 max-w-2xl mx-auto">
+        <div className="p-3 max-w-7xl mx-auto">
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl">Report Lost/Found Item</CardTitle>
