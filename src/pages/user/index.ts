@@ -7,3 +7,6 @@ export { UserSaved } from './UserSaved';
 export { UserNotification } from './UserNotification';
 export { UserSetting } from './UserSetting';
 export { SearchUser } from './SearchUser';
+export { CampusLostAndFinder } from './CampusLostAndFinder';
+export { CreateLostAndFinderItem } from './CreateLostAndFinderItem';
+export { LostAndFinderDetail } from './LostAndFinderDetail';

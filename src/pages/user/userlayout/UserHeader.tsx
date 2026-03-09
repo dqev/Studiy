@@ -51,7 +51,7 @@ export function UserHeader({ onMenuClick }: UserHeaderProps) {
                     className="p-2 hover:bg-slate-100 rounded-lg lg:hidden transition-colors"
                 >
                     <svg viewBox="0 0 16 16" fill="#000000" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-slate-600">
-                        <path d="M2 2.6666666666666665h12v1.3333333333333333H2V2.6666666666665Zm0 4.666666666666666h8v1.3333333333333333H2v-1.3333333333333333Zm0 4.666666666666666h12v1.3333333333333333H2v-1.3333333333333333Z" stroke-width="0.6667"></path>
+                        <path d="M2 2.6666666666666665h12v1.3333333333333333H2V2.6666666666665Zm0 4.666666666666666h8v1.3333333333333333H2v-1.3333333333333333Zm0 4.666666666666666h12v1.3333333333333333H2v-1.3333333333333333Z" strokeWidth="0.6667"></path>
                     </svg>
                 </button>
 

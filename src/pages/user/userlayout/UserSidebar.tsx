@@ -10,7 +10,8 @@ import {
     ClipboardList,
     ChevronRight,
     LogOut,
-    Users
+    Users,
+    Search
 } from 'lucide-react';
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { useLocation, useNavigate, Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ const userNavItems = [
     { name: 'Upload Material', href: '/user/upload', icon: Upload },
     { name: 'Saved Materials', href: '/user/saved', icon: Bookmark },
     { name: 'Search Users', href: '/user/search', icon: Users },
+    { name: 'Lost & Finder', href: '/user/lost-and-finder', icon: Search },
     { name: 'Pending Approval', href: '/user/pending', icon: ClipboardList },
     { name: 'Notifications', href: '/user/notifications', icon: Bell },
     { name: 'Profile', href: '/user/profile', icon: User },

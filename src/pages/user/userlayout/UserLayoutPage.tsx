@@ -28,6 +28,7 @@ const userNavItems = [
     { name: 'Upload Material', href: '/user/upload', icon: Upload },
     { name: 'Saved Materials', href: '/user/saved', icon: Bookmark },
     { name: 'Search Users', href: '/user/search', icon: Users },
+    { name: 'Lost & Finder', href: '/user/lost-and-finder', icon: Search },
     { name: 'Resource Requests', href: '/user/requests', icon: VscRequestChanges },
     { name: 'Pending Approval', href: '/user/pending', icon: MdPendingActions },
     { name: 'Notifications', href: '/user/notifications', icon: Bell },
@@ -197,7 +198,7 @@ export function UserLayoutPage() {
                             className="p-2 hover:bg-slate-100 rounded-lg lg:hidden"
                         >
                             <svg viewBox="0 0 16 16" fill="#000000" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-slate-600">
-                                <path d="M2 2.6666666666666665h12v1.3333333333333333H2V2.6666666666666665Zm0 4.666666666666666h8v1.3333333333333333H2v-1.3333333333333333Zm0 4.666666666666666h12v1.3333333333333333H2v-1.3333333333333333Z" stroke-width="0.6667"></path>
+                                <path d="M2 2.6666666666666665h12v1.3333333333333333H2V2.6666666666666665Zm0 4.666666666666666h8v1.3333333333333333H2v-1.3333333333333333Zm0 4.666666666666666h12v1.3333333333333333H2v-1.3333333333333333Z" strokeWidth="0.6667"></path>
                             </svg>
                         </button>
 

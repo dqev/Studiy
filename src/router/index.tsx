@@ -16,6 +16,9 @@ import { UserSetting } from '@/src/pages/user/UserSetting';
 import { ResourceRequests } from '@/src/pages/user/ResourceRequests';
 import { CreateResourceRequest } from '@/src/pages/user/CreateResourceRequest';
 import { SearchUser } from '@/src/pages/user/SearchUser';
+import { CampusLostAndFinder } from '@/src/pages/user/CampusLostAndFinder';
+import { CreateLostAndFinderItem } from '@/src/pages/user/CreateLostAndFinderItem';
+import { LostAndFinderDetail } from '@/src/pages/user/LostAndFinderDetail';
 
 // Admin Pages
 import { AdminLayoutPage } from '@/src/pages/admin/AdminLayoutPage';
@@ -73,6 +76,9 @@ export const router = createBrowserRouter([
       { path: 'requests', element: <ResourceRequests /> },
       { path: 'request/create', element: <CreateResourceRequest /> },
       { path: 'search', element: <SearchUser /> },
+      { path: 'lost-and-finder', element: <CampusLostAndFinder /> },
+      { path: 'lost-and-finder/create', element: <CreateLostAndFinderItem /> },
+      { path: 'lost-and-finder/:itemId', element: <LostAndFinderDetail /> },
     ],
   },
   // Admin Routes

@@ -20,6 +20,9 @@ import { UserNotification } from '@/src/pages/user/UserNotification';
 import { UserSetting } from '@/src/pages/user/UserSetting';
 import { ResourceRequests } from '@/src/pages/user/ResourceRequests';
 import { CreateResourceRequest } from '@/src/pages/user/CreateResourceRequest';
+import { CampusLostAndFinder } from '@/src/pages/user/CampusLostAndFinder';
+import { CreateLostAndFinderItem } from '@/src/pages/user/CreateLostAndFinderItem';
+import { LostAndFinderDetail } from '@/src/pages/user/LostAndFinderDetail';
 
 // Admin Pages & Layout
 import { AdminLayoutPage } from '@/src/pages/admin/AdminLayoutPage';
@@ -103,6 +106,9 @@ function AppContent() {
         <Route path="/user/settings" element={<UserSetting />} />
         <Route path="/user/requests" element={<ResourceRequests />} />
         <Route path="/user/request/create" element={<CreateResourceRequest />} />
+        <Route path="/user/lost-and-finder" element={<CampusLostAndFinder />} />
+        <Route path="/user/lost-and-finder/create" element={<CreateLostAndFinderItem />} />
+        <Route path="/user/lost-and-finder/:itemId" element={<LostAndFinderDetail />} />
       </Route>
 
       {/* Admin Routes */}
