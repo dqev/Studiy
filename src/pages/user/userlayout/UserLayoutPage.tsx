@@ -19,6 +19,7 @@ import { CgProfile } from "react-icons/cg";
 import { RiSettings3Fill } from "react-icons/ri";
 import { useAuth } from '@/src/context/AuthContext';
 import { useRouteProtection } from '@/src/hooks/useRouteProtection';
+import { useBackNavigation } from '@/src/hooks/useBackNavigation';
 import { UserRole } from '@/src/types';
 
 const userNavItems = [
@@ -44,6 +45,9 @@ export function UserLayoutPage() {
     const location = useLocation();
     const { user, isAuthenticated, loading } = useRouteProtection();
     const { logout } = useAuth();
+
+    // Prevent back navigation to landing page
+    useBackNavigation();
 
     // Close profile menu when clicking outside - MUST be before early returns
     React.useEffect(() => {

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { useAdminRouteProtection } from '@/src/hooks/useRouteProtection';
+import { useBackNavigation } from '@/src/hooks/useBackNavigation';
 import { UserRole } from '@/src/types';
 
 const adminNavItems = [
@@ -30,6 +31,9 @@ export function AdminLayoutPage() {
     const location = useLocation();
     const { user, loading } = useAdminRouteProtection();
     const { logout } = useAuth();
+
+    // Prevent back navigation to landing page
+    useBackNavigation();
 
     if (loading) {
         return (

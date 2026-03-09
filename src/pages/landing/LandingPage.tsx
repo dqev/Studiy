@@ -16,13 +16,28 @@ import {
   Linkedin,
   Twitter
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/src/components/ui/Button';
 import { Card, CardContent } from '@/src/components/ui/Card';
 import { Badge } from '@/src/components/ui/Badge';
+import { useAuth } from '@/src/context/AuthContext';
+import { UserRole } from '@/src/types';
 
 export function LandingPage() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const { user, loading, isAuthenticated } = useAuth();
+
+  // Redirect authenticated users to their dashboard
+  React.useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      if (user.role === UserRole.ADMIN) {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/user', { replace: true });
+      }
+    }
+  }, [loading, isAuthenticated, user, navigate]);
 
   const navLinks = [
     { name: 'Features', href: '#features' },
