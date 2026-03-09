@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Eye, MapPin, Clock, Phone, AlertCircle, Search as SearchIcon, MessageCircle, X } from 'lucide-react';
+import { Heart, Eye, MapPin, Clock, Phone, AlertCircle, Search as SearchIcon, MessageCircle, X, Trash2 } from 'lucide-react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/Card';
@@ -39,6 +39,7 @@ export function CampusLostAndFinder() {
     const [savedItems, setSavedItems] = useState<Set<string>>(new Set());
     const [expandedComments, setExpandedComments] = useState<{ [key: string]: boolean }>({});
     const [newComments, setNewComments] = useState<{ [key: string]: string }>({});
+    const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
     const categories = [
         'Electronics',
@@ -160,6 +161,24 @@ export function CampusLostAndFinder() {
             newSaved.add(itemId);
         }
         setSavedItems(newSaved);
+    };
+
+    const handleDeleteItem = (e: MouseEvent, itemId: string) => {
+        e.stopPropagation();
+        setDeleteConfirmId(itemId);
+    };
+
+    const confirmDelete = async () => {
+        if (deleteConfirmId) {
+            try {
+                await deleteDoc(doc(db, 'lostAndFinder', deleteConfirmId));
+                // Item will be removed automatically via onSnapshot
+            } catch (error) {
+                // Silently handle error
+            } finally {
+                setDeleteConfirmId(null);
+            }
+        }
     };
 
     const loadComments = async (itemId: string) => {
@@ -425,7 +444,7 @@ export function CampusLostAndFinder() {
             {loading ? (
                 <SkeletonTheme baseColor="#f1f5f9" highlightColor="#e2e8f0">
                     <div className="space-y-3">
-                        {[...Array(Math.max(filteredItems.length, 3))].map((_, i) => (
+                        {[...Array(Math.max(filteredItems.length, 2))].map((_, i) => (
                             <SkeletonCard key={i} />
                         ))}
                     </div>
@@ -465,14 +484,22 @@ export function CampusLostAndFinder() {
                                     <h3 className="text-base sm:text-lg font-bold text-slate-900 line-clamp-2 flex-1">
                                         {item.title}
                                     </h3>
-                                    <Badge
-                                        className={`flex-shrink-0 ${item.type === 'lost'
-                                            ? 'bg-red-500 text-white'
-                                            : 'bg-green-500 text-white'
-                                            }`}
-                                    >
-                                        {item.type.toUpperCase()}
-                                    </Badge>
+                                    <div className="flex flex-col gap-1 flex-shrink-0">
+                                        {item.status === 'resolved' ? (
+                                            <Badge className="bg-emerald-500 text-white text-xs">
+                                                ✓ RESOLVED
+                                            </Badge>
+                                        ) : (
+                                            <Badge
+                                                className={`${item.type === 'lost'
+                                                    ? 'bg-red-500 text-white'
+                                                    : 'bg-green-500 text-white'
+                                                    }`}
+                                            >
+                                                {item.type.toUpperCase()}
+                                            </Badge>
+                                        )}
+                                    </div>
                                 </div>
                                 <p className="text-sm text-slate-600 line-clamp-2 pb-3 border-b border-slate-200">
                                     {item.description}
@@ -584,6 +611,15 @@ export function CampusLostAndFinder() {
                                                 }`}
                                         />
                                     </button>
+                                    {user?.email === item.uploaderEmail && (
+                                        <button
+                                            onClick={(e) => handleDeleteItem(e, item.id || '')}
+                                            className="flex-shrink-0 ml-2"
+                                            title="Delete item"
+                                        >
+                                            <Trash2 className="w-5 h-5 sm:w-6 sm:h-6 text-red-500 hover:text-red-700 transition-colors" />
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
@@ -654,6 +690,39 @@ export function CampusLostAndFinder() {
                             )}
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {deleteConfirmId && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 animate-in fade-in zoom-in-95">
+                        <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
+                            <AlertCircle className="w-6 h-6 text-red-600" />
+                        </div>
+                        <h3 className="text-lg font-bold text-center text-slate-900 mb-2">
+                            Delete Report
+                        </h3>
+                        <p className="text-center text-slate-600 mb-6">
+                            Do you really want to delete this report? This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3 justify-center">
+                            <Button
+                                onClick={() => setDeleteConfirmId(null)}
+                                className="px-6 bg-slate-200 hover:bg-slate-300 text-slate-900"
+                                variant="secondary"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={confirmDelete}
+                                className="px-6 bg-red-500 hover:bg-red-600 text-white"
+                                variant="primary"
+                            >
+                                Delete
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
