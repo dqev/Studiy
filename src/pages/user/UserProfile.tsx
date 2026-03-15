@@ -4,7 +4,7 @@ import { Button } from '@/src/components/ui/Button';
 import { Card } from '@/src/components/ui/Card';
 import { Input } from '@/src/components/ui/Input';
 import { useAuth } from '@/src/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 // DiceBear avatar styles
@@ -27,7 +27,12 @@ const generateAvatarUrl = (style: string, seed: string) => {
 export function UserProfile() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const { username: urlUsername } = useParams<{ username: string }>();
     const db = getFirestore();
+
+    // Use current user's username if in own profile
+    const profileUsername = urlUsername || user?.username;
+    const isOwnProfile = user?.username?.toLowerCase() === profileUsername?.toLowerCase();
 
     const [isEditing, setIsEditing] = React.useState(false);
     const [loading, setLoading] = React.useState(false);

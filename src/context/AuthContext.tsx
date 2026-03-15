@@ -9,7 +9,7 @@ interface AuthContextType {
     loading: boolean;
     error: string | null;
     login: (email: string, password: string) => Promise<void>;
-    signup: (email: string, password: string) => Promise<void>;
+    signup: (email: string, password: string, username: string) => Promise<void>;
     loginGoogle: () => Promise<void>;
     logout: () => Promise<void>;
     isAdmin: boolean;
@@ -87,11 +87,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const signup = async (email: string, password: string) => {
+    const signup = async (email: string, password: string, username: string) => {
         try {
             setLoading(true);
             setError(null);
-            const appUser = await signUpStudent(email, password);
+            const appUser = await signUpStudent(email, password, username);
             setUser(appUser);
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Signup failed';

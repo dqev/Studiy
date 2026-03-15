@@ -6,6 +6,7 @@ import { AuthLayout } from '@/src/layouts/AuthLayout';
 import { UserLayoutPage } from '@/src/pages/user/userlayout/UserLayoutPage';
 import { UserHomepage } from '@/src/pages/user/UserHomepage';
 import { UserDashboard } from '@/src/pages/user/UserDashboard';
+import { ClassMaterial } from '@/src//pages/user/ClassMaterial';
 import { UserProfile } from '@/src/pages/user/UserProfile';
 import { UserResources } from '@/src/pages/user/UserResources';
 import { UserUpload } from '@/src/pages/user/UserUpload';
@@ -67,6 +68,7 @@ export const router = createBrowserRouter([
       { path: 'home', element: <UserHomepage /> },
       { index: true, element: <UserDashboard /> },
       { path: 'resources', element: <UserResources /> },
+      { path: 'class-material', element: <ClassMaterial /> },
       { path: 'upload', element: <UserUpload /> },
       { path: 'saved', element: <UserSaved /> },
       { path: 'pending', element: <UserPendingMaterial /> },

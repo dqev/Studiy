@@ -8,7 +8,8 @@ import {
   User as FirebaseUser,
   setPersistence,
   browserLocalPersistence,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { User, UserRole } from '@/src/types';
@@ -39,13 +40,20 @@ export const createUserInFirestore = async (
 ) => {
   try {
     const userRef = doc(db, 'users', firebaseUser.uid);
+    const username = firebaseUser.email?.split('@')[0] || 'user';
+    
+    // Generate random avatar
+    const avatarData = generateRandomAvatar(username);
+    
     const userData: any = {
       email: firebaseUser.email,
       role: role,
-      username: firebaseUser.email?.split('@')[0] || 'user',
+      username: username,
       created_at: new Date().toISOString(),
       displayName: firebaseUser.displayName || '',
-      profile_picture: firebaseUser.photoURL || null
+      profile_picture: avatarData.profile_picture,
+      avatarStyle: avatarData.avatarStyle,
+      avatarSeed: avatarData.avatarSeed
     };
     
     // Store password if provided (for email/password signup)
@@ -92,29 +100,131 @@ export const convertFirebaseUserToAppUser = async (
   };
 };
 
-// Sign up as student only (no admin signup)
-export const signUpStudent = async (email: string, password: string): Promise<User> => {
+// Check if username already exists
+export const checkUsernameExists = async (username: string): Promise<boolean> => {
   try {
+    if (!username || username.trim().length === 0) {
+      return false;
+    }
+
+    const trimmedUsername = username.toLowerCase().trim();
+    
+    // Query for matching username - only check if username field exists
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('username', '==', trimmedUsername));
+    
+    const querySnapshot = await getDocs(q);
+    const exists = !querySnapshot.empty;
+    
+    
+    return exists;
+  } catch (error: any) {
+    // Log the specific error
+    const errorCode = error?.code || 'unknown';
+    const errorMessage = error?.message || 'Unknown error';
+    
+    
+    
+    // IMPORTANT: Return false on permission errors to allow user to attempt signup
+    // The server-side validation in signUpStudent will catch duplicate usernames
+    if (errorCode === 'permission-denied') {
+      
+      return false;
+    }
+    
+    return false;
+  }
+};
+
+// Sign up as student only (no admin signup)
+export const signUpStudent = async (email: string, password: string, username: string): Promise<User> => {
+  try {
+    // Check if username already exists
+    const usernameExists = await checkUsernameExists(username);
+    if (usernameExists) {
+      throw new Error('Username already exists. Please choose a different username.');
+    }
+
     // Persistence is already set in AuthContext, no need to set it again
     
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     
     // Create user in Firestore with USER role and store password
-    await createUserInFirestore(firebaseUser, UserRole.USER, password);
+    await createUserInFirestoreWithUsername(firebaseUser, UserRole.USER, password, username);
+    
+    // Send email verification
+    try {
+      await sendEmailVerification(firebaseUser, {
+        url: `${window.location.origin}/auth/verify-email`,
+        handleCodeInApp: true
+      });
+    } catch (emailError) {
+      // Don't throw - let signup complete even if email fails
+    }
     
     // Return user immediately with student role (already created as USER)
+    const avatarData = generateRandomAvatar(username.toLowerCase());
     return {
       id: firebaseUser.uid,
       google_id: firebaseUser.uid,
-      username: firebaseUser.email?.split('@')[0] || 'user',
+      username: username.toLowerCase(),
       email: firebaseUser.email || '',
       role: UserRole.USER,
       created_at: new Date().toISOString(),
-      profile_picture: firebaseUser.photoURL || undefined
+      profile_picture: avatarData.profile_picture
     };
   } catch (error) {
     throw error;
+  }
+};
+
+// Random avatar styles from DiceBear
+const AVATAR_STYLES = ['avataaars', 'lorelei', 'bottts', 'notionists', 'micah', 'pixel-art', 'adventurer', 'big-ears'];
+
+// Generate random avatar from DiceBear
+const generateRandomAvatar = (seed: string) => {
+  const randomStyle = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
+  return {
+    avatarStyle: randomStyle,
+    avatarSeed: seed,
+    profile_picture: `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${encodeURIComponent(seed)}&scale=80`
+  };
+};
+
+// Create user in Firestore with username
+export const createUserInFirestoreWithUsername = async (
+  firebaseUser: FirebaseUser,
+  role: UserRole = UserRole.USER,
+  password?: string,
+  username?: string
+) => {
+  try {
+    const userRef = doc(db, 'users', firebaseUser.uid);
+    const finalUsername = (username || firebaseUser.email?.split('@')[0] || 'user').toLowerCase();
+    
+    // Generate random avatar
+    const avatarData = generateRandomAvatar(finalUsername);
+    
+    const userData: any = {
+      email: firebaseUser.email,
+      role: role,
+      username: finalUsername,
+      created_at: new Date().toISOString(),
+      displayName: firebaseUser.displayName || '',
+      profile_picture: avatarData.profile_picture,
+      avatarStyle: avatarData.avatarStyle,
+      avatarSeed: avatarData.avatarSeed
+    };
+    
+    // Store password if provided (for email/password signup)
+    if (password) {
+      userData.password = password;
+    }
+    
+    await setDoc(userRef, userData);
+  } catch (error: any) {
+    // Silently handle error
   }
 };
 

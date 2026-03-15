@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, FormEvent } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 
 export function LoginPage() {
@@ -8,6 +9,7 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -75,15 +77,29 @@ export function LoginPage() {
 
         <div>
           <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">Password</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none text-slate-900 bg-white placeholder-slate-400 transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter your password"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none text-slate-900 bg-white placeholder-slate-400 transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition"
+              disabled={loading}
+            >
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         <div className="flex justify-between items-center pt-2">

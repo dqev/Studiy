@@ -22,7 +22,7 @@ const userNavItems: NavItem[] = [
     { name: 'Saved Materials', href: '/user/saved', icon: Bookmark },
     { name: 'Pending Approval', href: '/user/pending', icon: ClipboardList },
     { name: 'Notifications', href: '/user/notifications', icon: Bell },
-    { name: 'Profile', href: '/user/profile', icon: User },
+    // Profile will be dynamically added with username
     { name: 'Settings', href: '/user/settings', icon: Settings },
 ];
 

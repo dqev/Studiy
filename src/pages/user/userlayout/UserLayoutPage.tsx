@@ -15,7 +15,6 @@ import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { VscRequestChanges } from "react-icons/vsc";
 import { MdPendingActions } from "react-icons/md";
 import { IoHome } from "react-icons/io5";
-import { CgProfile } from "react-icons/cg";
 import { RiSettings3Fill } from "react-icons/ri";
 import { useAuth } from '@/src/context/AuthContext';
 import { useRouteProtection } from '@/src/hooks/useRouteProtection';
@@ -25,6 +24,7 @@ import { UserRole } from '@/src/types';
 const userNavItems = [
     { name: 'Home', href: '/user', icon: IoHome },
     { name: 'Dashboard', href: '/user/dashboard', icon: TbLayoutDashboardFilled },
+    { name: 'Class Material', href: '/user/class-material', icon: Notebook },
     { name: 'My Resources', href: '/user/resources', icon: Notebook },
     { name: 'Upload Material', href: '/user/upload', icon: Upload },
     { name: 'Saved Materials', href: '/user/saved', icon: Bookmark },
@@ -33,7 +33,7 @@ const userNavItems = [
     { name: 'Resource Requests', href: '/user/requests', icon: VscRequestChanges },
     { name: 'Pending Approval', href: '/user/pending', icon: MdPendingActions },
     { name: 'Notifications', href: '/user/notifications', icon: Bell },
-    { name: 'Profile', href: '/user/profile', icon: CgProfile },
+    // Profile will be dynamically added with username
     { name: 'Settings', href: '/user/settings', icon: RiSettings3Fill },
 ];
 
@@ -105,6 +105,8 @@ export function UserLayoutPage() {
     const isActive = (href: string) => {
         if (href === '/user') return location.pathname === '/user' || location.pathname === '/user/';
         if (href === '/user/dashboard') return location.pathname === '/user/dashboard';
+        // Don't check paths that look like /:username (profile routes) for /user prefix
+        if (!location.pathname.startsWith('/user') && location.pathname !== '/') return false;
         return location.pathname.startsWith(href);
     };
 
@@ -165,6 +167,24 @@ export function UserLayoutPage() {
                                 </Link>
                             );
                         })}
+
+                        {/* Profile Link (Dynamic with username) */}
+                        {user && (
+                            <Link
+                                to={`/${user.username}`}
+                                onClick={() => setIsSidebarOpen(false)}
+                                className={`
+                    flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                    ${location.pathname === `/${user.username}`
+                                        ? 'bg-indigo-50 text-indigo-600'
+                                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                                    }
+                  `}
+                            >
+                                <User className={`mr-3 h-5 w-5 ${location.pathname === `/${user.username}` ? 'text-indigo-600' : 'text-slate-400'}`} />
+                                Profile
+                            </Link>
+                        )}
                     </div>
 
                     {/* Create Request Button */}
@@ -264,7 +284,7 @@ export function UserLayoutPage() {
                                     <div className="absolute right-0 top-12 mt-3 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-50">
                                         {/* Profile Option */}
                                         <button
-                                            onClick={() => handleProfileMenuClick('/user/profile')}
+                                            onClick={() => user && handleProfileMenuClick(`/${user.username}`)}
                                             className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center space-x-2 transition-colors"
                                         >
                                             <User className="h-4 w-4 text-slate-500" />

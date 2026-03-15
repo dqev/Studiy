@@ -23,6 +23,7 @@ import { CreateResourceRequest } from '@/src/pages/user/CreateResourceRequest';
 import { CampusLostAndFinder } from '@/src/pages/user/CampusLostAndFinder';
 import { CreateLostAndFinderItem } from '@/src/pages/user/CreateLostAndFinderItem';
 import { LostAndFinderDetail } from '@/src/pages/user/LostAndFinderDetail';
+import { ClassMaterial } from '@/src/pages/user/ClassMaterial';
 
 // Admin Pages & Layout
 import { AdminLayoutPage } from '@/src/pages/admin/AdminLayoutPage';
@@ -38,6 +39,7 @@ import { AdminSettings } from '@/src/pages/admin/AdminSettings';
 import { LandingPage } from '@/src/pages/landing/LandingPage';
 import { LoginPage } from '@/src/pages/auth/LoginPage';
 import { SignupPage } from '@/src/pages/auth/SignupPage';
+import { EmailVerificationPage } from '@/src/pages/auth/EmailVerificationPage';
 import { ForgotPasswordPage } from '@/src/pages/auth/ForgotPasswordPage';
 import { PlaceholderPage } from '@/src/components/common/PlaceholderPage';
 
@@ -89,6 +91,7 @@ function AppContent() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/auth/verify-email" element={<EmailVerificationPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
@@ -97,18 +100,19 @@ function AppContent() {
         <Route path="/user" element={<UserHomepage />} />
         <Route path="/user/dashboard" element={<UserDashboard />} />
         <Route path="/user/resources" element={<UserResources />} />
+        <Route path="/user/class-material" element={<ClassMaterial />} />
         <Route path="/user/upload" element={<UserUpload />} />
         <Route path="/user/search" element={<SearchUser />} />
         <Route path="/user/saved" element={<UserSaved />} />
         <Route path="/user/pending" element={<UserPendingMaterial />} />
         <Route path="/user/notifications" element={<UserNotification />} />
-        <Route path="/user/profile" element={<UserProfile />} />
         <Route path="/user/settings" element={<UserSetting />} />
         <Route path="/user/requests" element={<ResourceRequests />} />
         <Route path="/user/request/create" element={<CreateResourceRequest />} />
         <Route path="/user/lost-and-finder" element={<CampusLostAndFinder />} />
         <Route path="/user/lost-and-finder/create" element={<CreateLostAndFinderItem />} />
         <Route path="/user/lost-and-finder/:itemId" element={<LostAndFinderDetail />} />
+        <Route path="/:username" element={<UserProfile />} />
       </Route>
 
       {/* Admin Routes */}

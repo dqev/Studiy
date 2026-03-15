@@ -2,6 +2,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
+      // Allow unauthenticated users to query by username during signup
+      allow list: if true; // Allow listing to check username availability
       allow read: if request.auth != null;
       allow create: if request.auth.uid == userId;
       allow update: if request.auth.uid == userId;

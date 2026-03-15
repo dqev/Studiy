@@ -110,7 +110,7 @@ export function UserHeader({ onMenuClick }: UserHeaderProps) {
                             <div className="absolute right-0 top-14 mt-3 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-50">
                                 {/* Profile Option */}
                                 <button
-                                    onClick={() => handleProfileMenuClick('/user/profile')}
+                                    onClick={() => user && handleProfileMenuClick(`/${user.username}`)}
                                     className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center space-x-2 transition-colors"
                                 >
                                     <User className="h-4 w-4 text-slate-500" />
