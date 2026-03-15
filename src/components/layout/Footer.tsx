@@ -1,4 +1,4 @@
-import { GraduationCap, Github, Twitter, Linkedin } from 'lucide-react';
+import { Github, Twitter, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Footer() {
@@ -42,8 +42,8 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
           <div className="col-span-2 lg:col-span-2">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-              <div className="bg-indigo-600 p-1.5 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
+              <div className=" p-1.5 rounded-lg">
+                <img src="/icon.png" alt="Studiy Logo" className="h-6 w-6" />
               </div>
               <span className="text-xl font-bold text-slate-900 tracking-tight">Studiy</span>
             </Link>
