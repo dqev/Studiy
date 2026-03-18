@@ -164,8 +164,8 @@ export function LoginPage() {
       {/* Footer Text */}
       <p className="text-center text-xs text-slate-500 mt-6 sm:mt-8">
         By signing in, you agree to our <br />
-        <span className="text-slate-600 hover:text-slate-800 cursor-pointer">Terms of Service</span> and{' '}
-        <span className="text-slate-600 hover:text-slate-800 cursor-pointer">Privacy Policy</span>
+        <Link to="/terms-of-service" className="text-slate-600 hover:text-slate-800 transition-colors">Terms of Service</Link> and{' '}
+        <Link to="/privacy-policy" className="text-slate-600 hover:text-slate-800 transition-colors">Privacy Policy</Link>
       </p>
     </>
   );

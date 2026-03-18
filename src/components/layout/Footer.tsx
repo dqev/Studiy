@@ -8,7 +8,7 @@ export function Footer() {
     {
       title: 'Product',
       links: [
-        { name: 'Features', href: '#' },
+        { name: 'Features', href: '#features' },
         { name: 'Resources', href: '#' },
         { name: 'Pricing', href: '#' },
         { name: 'Updates', href: '#' },
@@ -26,8 +26,8 @@ export function Footer() {
     {
       title: 'Legal',
       links: [
-        { name: 'Privacy', href: '#' },
-        { name: 'Terms', href: '#' },
+        { name: 'Privacy', href: '/privacy-policy' },
+        { name: 'Terms', href: '/terms-of-service' },
         { name: 'Cookie Policy', href: '#' },
       ],
     },
@@ -70,9 +70,15 @@ export function Footer() {
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <a href={link.href} className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">
-                      {link.name}
-                    </a>
+                    {link.href.startsWith('/') ? (
+                      <Link to={link.href} className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">
+                        {link.name}
+                      </Link>
+                    ) : (
+                      <a href={link.href} className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">
+                        {link.name}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -84,8 +90,12 @@ export function Footer() {
             © {currentYear} Studiy Inc. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <a href="#" className="text-xs text-slate-400 hover:text-slate-600">Privacy Policy</a>
-            <a href="#" className="text-xs text-slate-400 hover:text-slate-600">Terms of Service</a>
+            <Link to="/privacy-policy" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/terms-of-service" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>

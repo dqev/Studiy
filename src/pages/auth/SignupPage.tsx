@@ -125,7 +125,7 @@ export function SignupPage() {
         message: ' Username is available!'
       };
     } catch (error) {
-      
+
       // Return a warning state instead of blocking the user
       return {
         isValid: true,
@@ -387,10 +387,10 @@ export function SignupPage() {
                 type="text"
                 placeholder="Choose a unique username (3-20 chars)"
                 className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border transition outline-none text-slate-900 bg-white placeholder-slate-400 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${usernameValidation?.isValid
-                    ? 'border-green-300 focus:ring-2 focus:ring-green-500 focus:border-transparent'
-                    : usernameValidation?.isValid === false
-                      ? 'border-red-300 focus:ring-2 focus:ring-red-500 focus:border-transparent'
-                      : 'border-slate-300 focus:ring-2 focus:ring-black focus:border-transparent'
+                  ? 'border-green-300 focus:ring-2 focus:ring-green-500 focus:border-transparent'
+                  : usernameValidation?.isValid === false
+                    ? 'border-red-300 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                    : 'border-slate-300 focus:ring-2 focus:ring-black focus:border-transparent'
                   }`}
                 value={username}
                 onChange={(e) => handleUsernameChange(e.target.value)}
@@ -403,10 +403,10 @@ export function SignupPage() {
               {/* Username Validation Message */}
               {usernameValidation && (
                 <div className={`mt-2 p-3 rounded-lg flex items-start gap-2 ${usernameValidation.message.includes('⚠️')
-                    ? 'bg-yellow-50 border border-yellow-200'
-                    : usernameValidation.isValid
-                      ? 'bg-green-50 border border-green-200'
-                      : 'bg-red-50 border border-red-200'
+                  ? 'bg-yellow-50 border border-yellow-200'
+                  : usernameValidation.isValid
+                    ? 'bg-green-50 border border-green-200'
+                    : 'bg-red-50 border border-red-200'
                   }`}>
                   {usernameValidation.message.includes('⚠️') ? (
                     <AlertCircle className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
@@ -417,8 +417,8 @@ export function SignupPage() {
                   )}
                   <div>
                     <p className={`text-xs sm:text-sm font-medium ${usernameValidation.message.includes('⚠️')
-                        ? 'text-yellow-700'
-                        : usernameValidation.isValid ? 'text-green-700' : 'text-red-700'
+                      ? 'text-yellow-700'
+                      : usernameValidation.isValid ? 'text-green-700' : 'text-red-700'
                       }`}>
                       {usernameValidation.message}
                     </p>
@@ -588,8 +588,8 @@ export function SignupPage() {
           {/* Footer Text */}
           <p className="text-center text-xs text-slate-500 mt-6 sm:mt-8">
             By signing up, you agree to our <br />
-            <span className="text-slate-600 hover:text-slate-800 cursor-pointer">Terms of Service</span> and{' '}
-            <span className="text-slate-600 hover:text-slate-800 cursor-pointer">Privacy Policy</span>
+            <Link to="/terms-of-service" className="text-slate-600 hover:text-slate-800 transition-colors">Terms of Service</Link> and{' '}
+            <Link to="/privacy-policy" className="text-slate-600 hover:text-slate-800 transition-colors">Privacy Policy</Link>
           </p>
         </>
       )}

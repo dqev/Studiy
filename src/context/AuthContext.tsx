@@ -44,14 +44,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                         // Token found in localStorage - user session is restored
                         const appUser = await convertFirebaseUserToAppUser(firebaseUser);
                         setUser(appUser);
+                        // Cache user data for instant access on landing page
+                        localStorage.setItem('cachedUser', JSON.stringify(appUser));
                     } else {
                         // No valid token found - user is logged out
                         setUser(null);
+                        localStorage.removeItem('cachedUser');
                     }
                     setError(null);
                 } catch (err) {
                     setError(err instanceof Error ? err.message : 'Authentication error');
                     setUser(null);
+                    localStorage.removeItem('cachedUser');
                 } finally {
                     setLoading(false);
                 }
@@ -78,6 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setError(null);
             const appUser = await loginUser(email, password);
             setUser(appUser);
+            // Cache user data for instant access
+            localStorage.setItem('cachedUser', JSON.stringify(appUser));
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Login failed';
             setError(errorMessage);
@@ -93,6 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setError(null);
             const appUser = await signUpStudent(email, password, username);
             setUser(appUser);
+            // Cache user data for instant access
+            localStorage.setItem('cachedUser', JSON.stringify(appUser));
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Signup failed';
             setError(errorMessage);
@@ -108,6 +116,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setError(null);
             const appUser = await loginWithGoogle();
             setUser(appUser);
+            // Cache user data for instant access
+            localStorage.setItem('cachedUser', JSON.stringify(appUser));
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Google login failed';
             setError(errorMessage);
@@ -123,6 +133,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setError(null);
             await firebaseSignOut(auth);
             setUser(null);
+            // Clear cached user data
+            localStorage.removeItem('cachedUser');
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Logout failed';
             setError(errorMessage);

@@ -41,6 +41,8 @@ import { LoginPage } from '@/src/pages/auth/LoginPage';
 import { SignupPage } from '@/src/pages/auth/SignupPage';
 import { EmailVerificationPage } from '@/src/pages/auth/EmailVerificationPage';
 import { ForgotPasswordPage } from '@/src/pages/auth/ForgotPasswordPage';
+import { TermsOfService } from '@/src/pages/legal/TermsOfService';
+import { PrivacyPolicy } from '@/src/pages/legal/PrivacyPolicy';
 import { PlaceholderPage } from '@/src/components/common/PlaceholderPage';
 
 // Component that handles navigation based on auth state
@@ -85,6 +87,8 @@ function AppContent() {
         <Route path="/how-it-works" element={<PlaceholderPage title="How it Works" />} />
         <Route path="/resources" element={<PlaceholderPage title="Resources" />} />
         <Route path="/faq" element={<PlaceholderPage title="FAQ" />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Route>
 
       {/* Auth Routes */}

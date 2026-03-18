@@ -26,18 +26,36 @@ import { UserRole } from '@/src/types';
 export function LandingPage() {
   const [isOpen, setIsOpen] = React.useState(false);
   const navigate = useNavigate();
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  // Redirect authenticated users to their dashboard
+  // Fast redirect for already authenticated users (check localStorage first)
   React.useEffect(() => {
-    if (!loading && isAuthenticated && user) {
+    const cachedUser = localStorage.getItem('cachedUser');
+    if (cachedUser) {
+      try {
+        const userData = JSON.parse(cachedUser);
+        // Redirect immediately based on cached role
+        if (userData.role === 'admin') {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate('/user', { replace: true });
+        }
+      } catch (e) {
+        // If parsing fails, fallback to normal auth check
+      }
+    }
+  }, [navigate]);
+
+  // Backup: redirect if auth context updates (for new login)
+  React.useEffect(() => {
+    if (isAuthenticated && user) {
       if (user.role === UserRole.ADMIN) {
         navigate('/admin', { replace: true });
       } else {
         navigate('/user', { replace: true });
       }
     }
-  }, [loading, isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
   const navLinks = [
     { name: 'Features', href: '#features' },
