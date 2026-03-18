@@ -64,7 +64,7 @@ export function AdminLayoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-white">
             {/* Mobile Overlay */}
             {isSidebarOpen && (
                 <div
@@ -145,7 +145,7 @@ export function AdminLayoutPage() {
             {/* Main Content */}
             <div className="lg:pl-64 flex flex-col min-h-screen transition-all duration-300">
                 {/* Header */}
-                <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+                <header className="bg-white sticky top-0 z-40">
                     <div className="h-16 px-4 sm:px-8 flex items-center justify-between gap-4">
                         <button
                             onClick={() => setIsSidebarOpen(true)}

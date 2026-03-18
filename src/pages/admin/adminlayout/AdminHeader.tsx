@@ -10,7 +10,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
     const { user } = useAuth();
 
     return (
-        <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <header className="bg-white sticky top-0 z-40">
             <div className="h-16 px-4 sm:px-8 flex items-center justify-between gap-4">
                 {/* Menu Button */}
                 <button
