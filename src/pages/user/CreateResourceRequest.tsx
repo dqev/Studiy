@@ -102,7 +102,7 @@ export function CreateResourceRequest() {
     return (
         <div className="min-h-screen bg-white">
             {/* Page Header */}
-            <div className="px-4 sm:px-6 lg:px-8 py-6 border-b border-slate-200">
+            <div className="px-4 sm:px-6 lg:px-8 py-6">
                 <div className="max-w-7xl mx-auto">
                     <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">Request a Resource</h1>
                     <p className="text-slate-600 mt-2 text-sm sm:text-base">Tell the community what resource you're looking for</p>

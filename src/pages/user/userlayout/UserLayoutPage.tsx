@@ -63,6 +63,19 @@ export function UserLayoutPage() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isProfileMenuOpen]);
 
+    // Prevent body scroll when sidebar is open on mobile
+    React.useEffect(() => {
+        if (isSidebarOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isSidebarOpen]);
+
     if (loading) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">

@@ -41,6 +41,19 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
     const { user, logout } = useAuth();
     const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
 
+    // Prevent body scroll when sidebar is open on mobile
+    React.useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
+
     const isActive = (href: string) => {
         if (href === '/user') return location.pathname === '/user' || location.pathname.match(/^\/user\/?$/);
         return location.pathname.startsWith(href);

@@ -229,7 +229,7 @@ export function ResourceRequests() {
     return (
         <div className="min-h-screen bg-white">
             {/* Page Header */}
-            <div className="px-3 sm:px-4 lg:px-6 py-6 border-b border-slate-200">
+            <div className="px-3 sm:px-4 lg:px-6 py-6">
                 <div className="max-w-7xl mx-auto">
                     <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">Resource Requests</h1>
                     <p className="text-slate-600 mt-2 text-sm sm:text-base">See what resources others are looking for and help fulfill their requests</p>
