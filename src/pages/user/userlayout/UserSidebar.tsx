@@ -79,7 +79,7 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
             )}
 
             <aside className={`
-        w-64 bg-white border-r border-slate-200 flex flex-col fixed left-0 z-50 transition-transform duration-300 lg:translate-x-0 lg:top-0 lg:h-screen
+        w-64 bg-white border-r border-slate-200 flex flex-col fixed left-0 z-50 transition-transform duration-300 lg:translate-x-0 lg:top-0 lg:h-screen overflow-hidden
         top-16 h-[calc(100vh-64px)] md:top-16 md:h-[calc(100vh-64px)] lg:top-0 lg:h-screen
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>

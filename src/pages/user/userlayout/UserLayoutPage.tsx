@@ -135,7 +135,7 @@ export function UserLayoutPage() {
 
             {/* Sidebar */}
             <aside className={`
-        fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 z-50 transition-transform duration-300
+        fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 z-50 transition-transform duration-300 flex flex-col overflow-hidden
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
                 {/* Logo */}
