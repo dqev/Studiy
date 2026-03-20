@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Users, Search, Shield, Ban, Edit, UserCheck } from 'lucide-react';
+import { Users, Search, Shield, Ban, UserCheck } from 'lucide-react';
 import { Button } from '@/src/components/ui/Button';
 import { Card } from '@/src/components/ui/Card';
 import { Input } from '@/src/components/ui/Input';
 import { Badge } from '@/src/components/ui/Badge';
 import { useAuth } from '@/src/context/AuthContext';
-import { getFirestore, collection, getDocs, query, where, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { User as AppUser, UserRole } from '@/src/types';
+import { AdminUserInfo } from './AdminUserInfo';
 
 interface UserWithStats extends AppUser {
     uploads: number;
@@ -24,6 +25,8 @@ export function AdminUsers() {
     const [searchTerm, setSearchTerm] = React.useState('');
     const [roleFilter, setRoleFilter] = React.useState<'all' | 'admin' | 'user'>('all');
     const [processingId, setProcessingId] = React.useState<string | null>(null);
+    const [selectedUser, setSelectedUser] = React.useState<UserWithStats | null>(null);
+    const [showUserDetail, setShowUserDetail] = React.useState(false);
 
     React.useEffect(() => {
         if (user?.role === UserRole.ADMIN) {
@@ -68,7 +71,6 @@ export function AdminUsers() {
             setLoading(false);
         }
     };
-    
 
     const filterUsers = () => {
         let filtered = allUsers;
@@ -91,6 +93,11 @@ export function AdminUsers() {
         setFilteredUsers(filtered);
     };
 
+    const handleViewUserDetails = (appUser: UserWithStats) => {
+        setSelectedUser(appUser);
+        setShowUserDetail(true);
+    };
+
     const handleToggleAdmin = async (userId: string, currentRole: UserRole) => {
         try {
             setProcessingId(userId);
@@ -102,6 +109,10 @@ export function AdminUsers() {
             setAllUsers(prev =>
                 prev.map(u => u.id === userId ? { ...u, role: newRole } : u)
             );
+
+            if (selectedUser?.id === userId) {
+                setSelectedUser({ ...selectedUser, role: newRole });
+            }
         } catch (error) {
             console.error('Error toggling admin role:', error);
             alert('Failed to update user role');
@@ -124,6 +135,10 @@ export function AdminUsers() {
             setAllUsers(prev =>
                 prev.map(u => u.id === userId ? { ...u, isBanned: true } : u)
             );
+
+            if (selectedUser?.id === userId) {
+                setSelectedUser({ ...selectedUser, isBanned: true });
+            }
         } catch (error) {
             console.error('Error banning user:', error);
             alert('Failed to ban user');
@@ -143,6 +158,10 @@ export function AdminUsers() {
             setAllUsers(prev =>
                 prev.map(u => u.id === userId ? { ...u, isBanned: false } : u)
             );
+
+            if (selectedUser?.id === userId) {
+                setSelectedUser({ ...selectedUser, isBanned: false });
+            }
         } catch (error) {
             console.error('Error unbanning user:', error);
             alert('Failed to unban user');
@@ -260,7 +279,10 @@ export function AdminUsers() {
                             {filteredUsers.map((appUser) => (
                                 <tr key={appUser.id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                                     <td className="px-4 py-3">
-                                        <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleViewUserDetails(appUser)}
+                                            className="flex items-center gap-2 hover:text-indigo-600 transition-colors"
+                                        >
                                             {appUser.profile_picture ? (
                                                 <img src={appUser.profile_picture} alt={appUser.username} className="h-8 w-8 rounded-full object-cover" />
                                             ) : (
@@ -268,11 +290,11 @@ export function AdminUsers() {
                                                     {appUser.username.charAt(0).toUpperCase()}
                                                 </div>
                                             )}
-                                            <div>
+                                            <div className="text-left">
                                                 <p className="font-medium text-slate-900">{appUser.username}</p>
                                                 <p className="text-xs text-slate-500">{appUser.displayName}</p>
                                             </div>
-                                        </div>
+                                        </button>
                                     </td>
                                     <td className="px-4 py-3 text-sm text-slate-600">{appUser.email}</td>
                                     <td className="px-4 py-3">
@@ -327,6 +349,22 @@ export function AdminUsers() {
                         </tbody>
                     </table>
                 </div>
+            )}
+
+            {/* User Detail Modal */}
+            {selectedUser && (
+                <AdminUserInfo
+                    user={selectedUser}
+                    isOpen={showUserDetail}
+                    onClose={() => {
+                        setShowUserDetail(false);
+                        setSelectedUser(null);
+                    }}
+                    onToggleAdmin={handleToggleAdmin}
+                    onBanUser={handleBanUser}
+                    onUnbanUser={handleUnbanUser}
+                    processingId={processingId}
+                />
             )}
         </div>
     );

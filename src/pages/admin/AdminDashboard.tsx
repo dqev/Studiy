@@ -8,14 +8,16 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Download,
-  Star
+  Clock,
+  BarChart3,
+  Activity
 } from 'lucide-react';
 import { Card, CardContent } from '@/src/components/ui/Card';
 import { Badge } from '@/src/components/ui/Badge';
 import { Button } from '@/src/components/ui/Button';
 import { cn } from '@/src/utils/cn';
 import { useAuth } from '@/src/context/AuthContext';
-import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
 import { getPendingMaterials, getApprovedMaterials } from '@/src/firebase/materials';
 import { UserRole } from '@/src/types';
 import { useNavigate } from 'react-router-dom';
@@ -30,8 +32,10 @@ export function AdminDashboard() {
     totalResources: 0,
     pendingApprovals: 0,
     totalDownloads: 0,
+    activeUsers: 0,
   });
   const [recentActivities, setRecentActivities] = React.useState<any[]>([]);
+  const [recentPending, setRecentPending] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -48,22 +52,30 @@ export function AdminDashboard() {
       const usersSnapshot = await getDocs(collection(db, 'users'));
       const totalUsers = usersSnapshot.size;
 
+      // Count active users (those with at least one material)
+      const materialsSnapshot = await getDocs(collection(db, 'materials'));
+      const uniqueUploaders = new Set(
+        materialsSnapshot.docs.map(doc => doc.data().uploader_email)
+      );
+      const activeUsers = uniqueUploaders.size;
+
       // Get pending and approved materials
       const pending = await getPendingMaterials();
       const approved = await getApprovedMaterials();
 
       const totalResources = approved.length;
       const pendingApprovals = pending.length;
-      const totalDownloads = approved.reduce((sum, m) => sum + m.downloads, 0);
+      const totalDownloads = approved.reduce((sum, m) => sum + (m.downloads || 0), 0);
 
       setStats({
         totalUsers,
         totalResources,
         pendingApprovals,
         totalDownloads,
+        activeUsers,
       });
 
-      // Get recent activities
+      // Get recently approved materials
       const recentApproved = approved
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .slice(0, 5)
@@ -77,6 +89,21 @@ export function AdminDashboard() {
         }));
 
       setRecentActivities(recentApproved);
+
+      // Get recently pending materials
+      const recentPendingItems = pending
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 3)
+        .map(m => ({
+          type: 'pending',
+          title: m.title,
+          uploader: m.uploader_username,
+          date: m.created_at,
+          icon: AlertCircle,
+          color: 'text-amber-600',
+        }));
+
+      setRecentPending(recentPendingItems);
     } catch (error) {
       console.error('Error fetching admin stats:', error);
     } finally {
@@ -88,7 +115,7 @@ export function AdminDashboard() {
     {
       label: 'Total Users',
       value: stats.totalUsers.toString(),
-      change: '+12%',
+      change: `${stats.activeUsers} active`,
       trend: 'up' as const,
       icon: Users,
       color: 'text-blue-600',
@@ -97,7 +124,7 @@ export function AdminDashboard() {
     {
       label: 'Total Resources',
       value: stats.totalResources.toString(),
-      change: '+18%',
+      change: `${stats.pendingApprovals} pending`,
       trend: 'up' as const,
       icon: Files,
       color: 'text-indigo-600',
@@ -106,8 +133,8 @@ export function AdminDashboard() {
     {
       label: 'Pending Approvals',
       value: stats.pendingApprovals.toString(),
-      change: stats.pendingApprovals > 0 ? '+' + stats.pendingApprovals : '0',
-      trend: 'up' as const,
+      change: 'Needs review',
+      trend: 'down' as const,
       icon: AlertCircle,
       color: 'text-amber-600',
       bg: 'bg-amber-50'
@@ -115,7 +142,7 @@ export function AdminDashboard() {
     {
       label: 'Total Downloads',
       value: stats.totalDownloads.toString(),
-      change: '+25%',
+      change: 'Resource usage',
       trend: 'up' as const,
       icon: Download,
       color: 'text-green-600',
@@ -169,89 +196,110 @@ export function AdminDashboard() {
         ))}
       </div>
 
-      {/* Recent Activities */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-none shadow-sm">
+      {/* Recent Activities & Quick Actions Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quick Actions - Left Sidebar */}
+        <Card className="border-none shadow-sm lg:col-span-1">
           <div className="p-6 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900">Quick Actions</h2>
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-slate-600" />
+              <h2 className="text-lg font-semibold text-slate-900">Quick Actions</h2>
+            </div>
           </div>
           <CardContent className="p-6 space-y-3">
             <Button
               onClick={() => navigate('/admin/approvals')}
-              className="w-full justify-start text-left"
+              className="w-full justify-start text-left h-auto py-3 px-4"
               variant="outline"
             >
-              <AlertCircle className="h-4 w-4 mr-2 text-amber-600" />
-              Review Pending Approvals ({stats.pendingApprovals})
+              <AlertCircle className="h-5 w-5 mr-3 text-amber-600 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-semibold">Review Approvals</p>
+                <p className="text-xs text-slate-500">{stats.pendingApprovals} pending</p>
+              </div>
             </Button>
             <Button
               onClick={() => navigate('/admin/users')}
-              className="w-full justify-start text-left"
+              className="w-full justify-start text-left h-auto py-3 px-4"
               variant="outline"
             >
-              <Users className="h-4 w-4 mr-2 text-blue-600" />
-              Manage Users ({stats.totalUsers})
+              <Users className="h-5 w-5 mr-3 text-blue-600 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-semibold">Manage Users</p>
+                <p className="text-xs text-slate-500">{stats.totalUsers} total</p>
+              </div>
             </Button>
             <Button
               onClick={() => navigate('/admin/resources')}
-              className="w-full justify-start text-left"
+              className="w-full justify-start text-left h-auto py-3 px-4"
               variant="outline"
             >
-              <Files className="h-4 w-4 mr-2 text-indigo-600" />
-              View All Resources ({stats.totalResources})
+              <Files className="h-5 w-5 mr-3 text-indigo-600 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-semibold">View Resources</p>
+                <p className="text-xs text-slate-500">{stats.totalResources} approved</p>
+              </div>
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-sm">
-          <div className="p-6 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900">System Status</h2>
-          </div>
-          <CardContent className="p-6 space-y-4">
-            {[
-              { label: 'Database', status: 'Operational', color: 'bg-green-500' },
-              { label: 'Authentication', status: 'Operational', color: 'bg-green-500' },
-              { label: 'File Storage', status: 'Operational', color: 'bg-green-500' },
-              { label: 'Email Service', status: 'Operational', color: 'bg-green-500' },
-            ].map((service) => (
-              <div key={service.label} className="flex items-center justify-between">
+        {/* Recent Approvals - Middle & Right */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Recently Approved */}
+          {recentActivities.length > 0 && (
+            <Card className="border-none shadow-sm">
+              <div className="p-6 border-b border-slate-200">
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${service.color}`} />
-                  <span className="text-sm font-medium text-slate-700">{service.label}</span>
+                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                  <h2 className="text-lg font-semibold text-slate-900">Recently Approved</h2>
                 </div>
-                <Badge className="bg-green-100 text-green-800">{service.status}</Badge>
               </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Approvals */}
-      {recentActivities.length > 0 && (
-        <Card className="border-none shadow-sm">
-          <div className="p-6 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900">Recently Approved Resources</h2>
-          </div>
-          <CardContent className="p-6">
-            <div className="space-y-3">
-              {recentActivities.map((activity, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    <div>
-                      <p className="text-sm font-medium text-slate-900">{activity.title}</p>
-                      <p className="text-xs text-slate-500">by {activity.uploader}</p>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {recentActivities.map((activity, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-transparent rounded-lg border border-green-100">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-slate-900 truncate">{activity.title}</p>
+                        <p className="text-xs text-slate-500">by {activity.uploader}</p>
+                      </div>
+                      <span className="text-xs text-slate-500 ml-2 whitespace-nowrap">
+                        {new Date(activity.date).toLocaleDateString()}
+                      </span>
                     </div>
-                  </div>
-                  <span className="text-xs text-slate-500">
-                    {new Date(activity.date).toLocaleDateString()}
-                  </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Recently Pending */}
+          {recentPending.length > 0 && (
+            <Card className="border-none shadow-sm">
+              <div className="p-6 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-amber-600" />
+                  <h2 className="text-lg font-semibold text-slate-900">Pending Review</h2>
+                </div>
+              </div>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {recentPending.map((activity, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 bg-gradient-to-r from-amber-50 to-transparent rounded-lg border border-amber-100">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-slate-900 truncate">{activity.title}</p>
+                        <p className="text-xs text-slate-500">by {activity.uploader}</p>
+                      </div>
+                      <span className="text-xs text-slate-500 ml-2 whitespace-nowrap">
+                        {new Date(activity.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

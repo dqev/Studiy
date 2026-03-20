@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Settings, Bell, Shield, Database, AlertTriangle, Save, Mail, Users, FileText, Clock, HardDrive, Lock, Eye } from 'lucide-react';
+import { Settings, Bell, Shield, Database, AlertTriangle, Save, Mail, Users, FileText, Lock } from 'lucide-react';
 import { Button } from '@/src/components/ui/Button';
 import { Card } from '@/src/components/ui/Card';
 import { Input } from '@/src/components/ui/Input';
 import { useAuth } from '@/src/context/AuthContext';
-import { getFirestore, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { UserRole } from '@/src/types';
 
 interface AdminSettings {
@@ -19,12 +19,10 @@ interface AdminSettings {
     autoApproveResources: boolean;
     maxFileSize: number;
     approvalWaitTime: number;
-    allowedFileTypes: string[];
 
     // User Settings
     requireEmailVerification: boolean;
     enableUserRegistration: boolean;
-    defaultUserRole: string;
     autoSuspendAfterReports: number;
 
     // Security
@@ -37,11 +35,6 @@ interface AdminSettings {
     enableResourceApprovalNotifs: boolean;
     enableUserReportNotifs: boolean;
     notificationEmail: string;
-
-    // Database
-    enableAutoBackup: boolean;
-    backupFrequency: string;
-    retentionDays: number;
 }
 
 export function AdminSettings() {
@@ -50,9 +43,9 @@ export function AdminSettings() {
 
     const [settings, setSettings] = React.useState<AdminSettings>({
         // General
-        siteName: 'Eduflow',
+        siteName: 'Studiy',
         siteDescription: 'Educational Resource Sharing Platform',
-        supportEmail: 'support@eduflow.com',
+        supportEmail: 'support@studiy.com',
         maintenanceMode: false,
         maintenanceMessage: 'Platform under maintenance. Please try again later.',
 
@@ -60,12 +53,10 @@ export function AdminSettings() {
         autoApproveResources: false,
         maxFileSize: 50,
         approvalWaitTime: 48,
-        allowedFileTypes: ['pdf', 'docx', 'pptx', 'xlsx', 'txt', 'jpg', 'png'],
 
         // User Settings
         requireEmailVerification: true,
         enableUserRegistration: true,
-        defaultUserRole: 'user',
         autoSuspendAfterReports: 5,
 
         // Security
@@ -77,12 +68,7 @@ export function AdminSettings() {
         enableEmailNotifications: true,
         enableResourceApprovalNotifs: true,
         enableUserReportNotifs: true,
-        notificationEmail: 'admin@eduflow.com',
-
-        // Database
-        enableAutoBackup: true,
-        backupFrequency: 'daily',
-        retentionDays: 90,
+        notificationEmail: 'admin@studiy.com',
     });
 
     const [loading, setLoading] = React.useState(true);
@@ -381,6 +367,57 @@ export function AdminSettings() {
                 </div>
             </Card>
 
+            {/* Permission Settings */}
+            <Card className="p-6 border-indigo-200 bg-indigo-50">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-indigo-600" />
+                    Firestore Permissions
+                </h2>
+
+                <div className="space-y-4">
+                    <div className="p-4 bg-white rounded-lg border border-indigo-200">
+                        <p className="text-sm font-semibold text-slate-900 mb-2">Admin Permissions Status</p>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-slate-600">Toggle Admin Role</span>
+                                <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">✓ Enabled</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-slate-600">Ban/Unban Users</span>
+                                <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">✓ Enabled</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-slate-600">View User Details</span>
+                                <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">✓ Enabled</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-slate-600">Edit User Data</span>
+                                <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">✓ Enabled</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-lg border border-indigo-200">
+                        <p className="text-sm font-semibold text-slate-900 mb-3">Firestore Rules Info</p>
+                        <p className="text-sm text-slate-600 mb-2">
+                            The following permissions have been added to your Firestore rules:
+                        </p>
+                        <ul className="text-sm text-slate-600 space-y-1 ml-4">
+                            <li>• Admin users can update any user document</li>
+                            <li>• Admin users can change user roles (admin/user)</li>
+                            <li>• Admin users can ban/unban users</li>
+                            <li>• Admin users have full access to admin collection</li>
+                        </ul>
+                    </div>
+
+                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-xs text-blue-700">
+                            <strong>Note:</strong> Firestore permissions are automatically configured. If you're seeing permission errors, please ensure your Firebase auth is set up correctly.
+                        </p>
+                    </div>
+                </div>
+            </Card>
+
             {/* Notification Settings */}
             <Card className="p-6">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
@@ -488,76 +525,6 @@ export function AdminSettings() {
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             rows={3}
                         />
-                    </div>
-                </div>
-            </Card>
-
-            {/* Database Management */}
-            <Card className="p-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                    <Database className="h-5 w-5 text-indigo-600" />
-                    Database Management
-                </h2>
-
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                        <div>
-                            <p className="font-medium text-slate-900">Enable Auto Backup</p>
-                            <p className="text-sm text-slate-600">Automatically backup database</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                name="enableAutoBackup"
-                                checked={settings.enableAutoBackup}
-                                onChange={handleInputChange}
-                                className="sr-only peer"
-                            />
-                            <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                        </label>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Backup Frequency</label>
-                        <select
-                            name="backupFrequency"
-                            value={settings.backupFrequency}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                            <option value="hourly">Hourly</option>
-                            <option value="daily">Daily</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="monthly">Monthly</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Backup Retention (days)</label>
-                        <Input
-                            type="number"
-                            name="retentionDays"
-                            value={settings.retentionDays}
-                            onChange={handleInputChange}
-                            min="7"
-                            max="365"
-                        />
-                        <p className="text-xs text-slate-500 mt-1">How long to keep backup files</p>
-                    </div>
-
-                    <div className="space-y-3 pt-4 border-t">
-                        <Button variant="outline" className="w-full justify-start text-left">
-                            <HardDrive className="h-4 w-4 mr-2" />
-                            Manual Backup Now
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start text-left">
-                            <Database className="h-4 w-4 mr-2" />
-                            Restore from Backup
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start text-left">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Backup History
-                        </Button>
                     </div>
                 </div>
             </Card>

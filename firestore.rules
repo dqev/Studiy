@@ -1,12 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
     match /users/{userId} {
       // Allow unauthenticated users to query by username during signup
       allow list: if true; // Allow listing to check username availability
       allow read: if request.auth != null;
       allow create: if request.auth.uid == userId;
-      allow update: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId || isAdmin();
       allow delete: if false;
       
       // Allow authenticated users to read specific fields including profile_picture
@@ -16,6 +21,7 @@ service cloud.firestore {
     }
     
     match /materials/{materialId} {
+      // Admins can read all materials for user lookup
       allow read: if request.auth != null;
       allow create: if request.auth != null;
       allow update: if request.auth != null;
@@ -35,6 +41,14 @@ service cloud.firestore {
         allow update: if request.auth != null;
         allow delete: if request.auth != null;
       }
+    }
+
+    // Top-level comments collection (for admin queries)
+    match /comments/{commentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
     }
 
     match /requests/{requestId} {
@@ -67,6 +81,12 @@ service cloud.firestore {
         allow update: if request.auth != null && request.auth.uid == resource.data.authorId;
         allow delete: if request.auth != null && request.auth.uid == resource.data.authorId;
       }
+    }
+
+    // Admin panel data
+    match /admin/{document=**} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
   }
 }

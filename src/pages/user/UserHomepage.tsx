@@ -603,19 +603,17 @@ export function UserHomepage() {
                                                 className="h-7 sm:h-8 w-7 sm:w-8 rounded-full object-cover flex-shrink-0"
                                             />
                                         ) : (
-                                            <div className={`h-7 sm:h-8 w-7 sm:w-8 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0 ${!usersCache.has(material.uploader_username) ? 'bg-slate-400' : 'bg-gradient-to-br from-indigo-400 to-indigo-600'}`}>
+                                            <div className="h-7 sm:h-8 w-7 sm:w-8 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0 bg-gradient-to-br from-indigo-400 to-indigo-600">
                                                 {material.uploader_username?.charAt(0).toUpperCase()}
                                             </div>
                                         )}
                                         <div className="flex-1 min-w-0">
-                                            <p className={`font-semibold text-xs sm:text-sm truncate ${!usersCache.has(material.uploader_username) ? 'text-slate-400' : 'text-slate-900'}`}>
-                                                {!usersCache.has(material.uploader_username) ? 'Deleted User' : (material.uploader_displayName || material.uploader_username)}
+                                            <p className="font-semibold text-xs sm:text-sm truncate text-slate-900">
+                                                {material.uploader_displayName || material.uploader_username}
                                             </p>
-                                            {usersCache.has(material.uploader_username) && (
-                                                <p className="text-xs text-slate-500 truncate">
-                                                    @{material.uploader_username}
-                                                </p>
-                                            )}
+                                            <p className="text-xs text-slate-500 truncate">
+                                                @{material.uploader_username}
+                                            </p>
                                         </div>
                                     </div>
 
@@ -636,48 +634,32 @@ export function UserHomepage() {
                                         {material.comments && material.comments.length > 0 ? (
                                             <div className="space-y-2 max-h-48 overflow-y-auto">
                                                 {material.comments.map(comment => {
-                                                    // Get the most recent user info by looking up in usersCache
-                                                    let currentUserInfo = usersCache.get(comment.author_username);
-
-                                                    // If not found by username, try to find by author_id
-                                                    if (!currentUserInfo && comment.author_id) {
-                                                        for (const userInfo of usersCache.values()) {
-                                                            if ((userInfo as any).id === comment.author_id) {
-                                                                currentUserInfo = userInfo;
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-
-                                                    // Check if user is deleted (no userInfo found)
-                                                    const isDeletedUser = !currentUserInfo;
-                                                    const displayName = (currentUserInfo as any)?.displayName || comment.author_displayName || comment.author_username;
-                                                    const username = isDeletedUser ? 'Deleted User' : comment.author_username;
+                                                    // Use the displayName and profile picture stored with the comment
+                                                    const displayName = comment.author_displayName || comment.author_username;
+                                                    const profilePicture = comment.author_profile_picture;
 
                                                     return (
                                                         <div key={comment.id} className="flex gap-2">
-                                                            {(currentUserInfo as any)?.profile_picture || comment.author_profile_picture ? (
+                                                            {profilePicture ? (
                                                                 <img
-                                                                    src={(currentUserInfo as any)?.profile_picture || comment.author_profile_picture}
-                                                                    alt={username}
+                                                                    src={profilePicture}
+                                                                    alt={displayName}
                                                                     className="h-5 w-5 rounded-full object-cover flex-shrink-0"
                                                                 />
                                                             ) : (
-                                                                <div className={`h-5 w-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ${isDeletedUser ? 'bg-slate-400' : 'bg-gradient-to-br from-indigo-400 to-indigo-600'}`}>
-                                                                    {(comment.author_username?.charAt(0) || 'D').toUpperCase()}
+                                                                <div className="h-5 w-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 bg-gradient-to-br from-indigo-400 to-indigo-600">
+                                                                    {comment.author_username?.charAt(0).toUpperCase() || 'U'}
                                                                 </div>
                                                             )}
                                                             <div className="flex-1 min-w-0">
-                                                                <p className={`text-xs font-semibold truncate ${isDeletedUser ? 'text-slate-400' : 'text-slate-900'}`}>
-                                                                    {isDeletedUser ? 'Deleted User' : displayName}
+                                                                <p className="text-xs font-semibold truncate text-slate-900">
+                                                                    {displayName}
                                                                 </p>
-                                                                {!isDeletedUser && (
-                                                                    <p className="text-xs text-slate-500 truncate">
-                                                                        @{comment.author_username}
-                                                                    </p>
-                                                                )}
-                                                                <p className={`text-xs mt-0.5 ${isDeletedUser ? 'text-slate-400 italic' : 'text-slate-600'}`}>
-                                                                    {isDeletedUser ? '[This comment is from a deleted account]' : comment.content}
+                                                                <p className="text-xs text-slate-500 truncate">
+                                                                    @{comment.author_username}
+                                                                </p>
+                                                                <p className="text-xs mt-0.5 text-slate-600">
+                                                                    {comment.content}
                                                                 </p>
                                                             </div>
                                                         </div>

@@ -124,7 +124,7 @@ export function UserLayoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-white">
             {/* Mobile Overlay */}
             {isSidebarOpen && (
                 <div
@@ -135,7 +135,7 @@ export function UserLayoutPage() {
 
             {/* Sidebar */}
             <aside className={`
-        fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 z-50 transition-transform duration-300 flex flex-col overflow-hidden
+        fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 z-50 transition-transform duration-300 flex flex-col overflow-hidden rounded-r-3xl
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
                 {/* Logo */}
@@ -212,17 +212,6 @@ export function UserLayoutPage() {
                         </Link>
                     </div>
                 </nav>
-
-                {/* Logout */}
-                <div className="border-t border-slate-200 p-4">
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Logout
-                    </button>
-                </div>
             </aside>
 
             {/* Main Content */}
