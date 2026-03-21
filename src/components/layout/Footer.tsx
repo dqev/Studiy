@@ -1,28 +1,10 @@
-import { Github, Twitter, Linkedin } from 'lucide-react';
+import { FaGithub as Github, FaTwitter as Twitter, FaLinkedin as Linkedin } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = [
-    {
-      title: 'Product',
-      links: [
-        { name: 'Features', href: '#features' },
-        { name: 'Resources', href: '#' },
-        { name: 'Pricing', href: '#' },
-        { name: 'Updates', href: '#' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { name: 'About', href: '#' },
-        { name: 'Blog', href: '#' },
-        { name: 'Careers', href: '#' },
-        { name: 'Contact', href: '#' },
-      ],
-    },
     {
       title: 'Legal',
       links: [
@@ -52,13 +34,13 @@ export function Footer() {
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-slate-400 hover:text-indigo-600 transition-colors">
-                <Twitter className="h-5 w-5" />
+                <Twitter size={20} />
               </a>
               <a href="#" className="text-slate-400 hover:text-indigo-600 transition-colors">
-                <Github className="h-5 w-5" />
+                <Github size={20} />
               </a>
               <a href="#" className="text-slate-400 hover:text-indigo-600 transition-colors">
-                <Linkedin className="h-5 w-5" />
+                <Linkedin size={20} />
               </a>
             </div>
           </div>

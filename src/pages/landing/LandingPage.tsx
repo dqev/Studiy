@@ -1,21 +1,22 @@
 import * as React from 'react';
 import {
-  ArrowRight,
-  BookOpen,
-  Users,
-  Shield,
-  Zap,
-  CheckCircle2,
-  Search,
-  Download,
-  Share2,
-  X,
-  GraduationCap,
-  Globe,
-  Github,
-  Linkedin,
-  Twitter
-} from 'lucide-react';
+  FaArrowRight as ArrowRight,
+  FaBook as BookOpen,
+  FaUsers as Users,
+  FaLock as Shield,
+  FaLightbulb as Zap,
+  FaCheckCircle as CheckCircle2,
+  FaSearch as Search,
+  FaDownload as Download,
+  FaShare as Share2,
+  FaTimes as Close,
+  FaGraduationCap as GraduationCap,
+  FaGlobe as Globe,
+  FaGithub as Github,
+  FaLinkedin as Linkedin,
+  FaTwitter as Twitter
+} from 'react-icons/fa';
+import { X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/src/components/ui/Button';
 import { Card, CardContent } from '@/src/components/ui/Card';
@@ -63,6 +64,18 @@ export function LandingPage() {
     { name: 'FAQ', href: '#faq' },
   ];
 
+  // Close sidebar on scroll
+  React.useEffect(() => {
+    if (!isOpen) return;
+
+    const handleScroll = () => {
+      setIsOpen(false);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isOpen]);
+
   return (
     <div className="space-y-16 sm:space-y-24 pb-16 sm:pb-24">
       {/* Header/Navbar */}
@@ -73,9 +86,9 @@ export function LandingPage() {
               <img
                 src="/icon.png"
                 alt="Studiy Logo"
-                className="h-6 sm:h-5 w-6 sm:w-5 rounded-lg"
+                className="h-6 sm:h-5 w-6 sm:w-5 "
               />
-              <span className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Studiy</span>
+              <span className="text-[21px] sm:text-xl font-bold text-slate-900 tracking-tight">Studiy</span>
             </Link>
 
             {/* Desktop Nav */}
@@ -103,13 +116,19 @@ export function LandingPage() {
             <div className="md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:bg-slate-100 transition-colors focus:outline-none"
+                className="inline-flex items-center justify-center p-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none"
               >
                 {isOpen ? (
-                  <X className="h-6 w-6" />
+                  <X size={24} />
                 ) : (
-                  <svg viewBox="0 0 16 16" fill="#000000" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6">
-                    <path d="M10.666666666666666 12v1.3333333333333333H3.333333333333333v-1.3333333333333333h7.333333333333333Zm3.333333333333333 -4.666666666666666v1.3333333333333333H2v-1.3333333333333333h12Zm-1.3333333333333333 -4.666666666666666v1.3333333333333333H5.333333333333333V2.6666666666666665h7.333333333333333Z" strokeWidth="0.6667"></path>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6">
+                    <path
+                      d="M3 12H21M3 6H21M9 18H21"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 )}
               </button>
@@ -117,30 +136,55 @@ export function LandingPage() {
           </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile Sidebar */}
         {isOpen && (
-          <div className="md:hidden bg-white animate-in slide-in-from-top duration-200">
-            <div className="px-3 sm:px-4 pt-2 pb-3 space-y-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="block px-3 py-2 rounded-lg text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-colors"
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 md:hidden z-30"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
+              onClick={() => setIsOpen(false)}
+              onTouchEnd={() => setIsOpen(false)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') setIsOpen(false);
+              }}
+            />
+            {/* Sidebar */}
+            <div className="fixed right-0 top-0 h-screen w-64 bg-gradient-to-b from-slate-50 to-white shadow-2xl md:hidden z-40 animate-in slide-in-from-right duration-300 flex flex-col border-l border-slate-200 rounded-l-3xl">
+              <div className="flex items-center justify-end p-2">
+                <button
                   onClick={() => setIsOpen(false)}
+                  className="p-2 rounded-lg hover:bg-slate-100 transition-colors duration-150"
                 >
-                  {link.name}
-                </a>
-              ))}
-              <div className="pt-3 pb-2 space-y-2 px-3">
-                <Link to="/login" className="block" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" className="w-full text-sm" size="sm">Log in</Button>
-                </Link>
-                <Link to="/signup" className="block" onClick={() => setIsOpen(false)}>
-                  <Button className="w-full text-sm" size="sm">Sign up</Button>
-                </Link>
+                  <X size={24} color="#64748b" />
+                </button>
+              </div>
+
+              <div className="overflow-hidden px-3 py-4 space-y-1">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 active:scale-95"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.name}
+                  </a>
+                ))}
+
+                <div className="pt-3 space-y-2">
+                  <Link to="/login" className="block" onClick={() => setIsOpen(false)}>
+                    <Button variant="outline" className="w-full text-sm font-semibold rounded-xl py-2 border-slate-300 hover:border-indigo-300 hover:text-indigo-600" size="sm">Log in</Button>
+                  </Link>
+                  <Link to="/signup" className="block" onClick={() => setIsOpen(false)}>
+                    <Button className="w-full text-sm font-semibold rounded-xl py-2 bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-shadow" size="sm">Sign up</Button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </nav>
 
@@ -150,19 +194,16 @@ export function LandingPage() {
         <section className="relative pt-8 sm:pt-12 pb-8 sm:pb-12 lg:pt-24 lg:pb-20 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-3xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
-              <Badge variant="secondary" className="px-2.5 sm:px-3 py-1 text-indigo-600 bg-indigo-50 border-none text-[9px] sm:text-xs inline-block">
-                New: Collaborative Study Groups are here!
-              </Badge>
               <h1 className="text-3xl sm:text-4xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
-                The ultimate hub for <span className="text-indigo-600">student resources.</span>
+                Notes from real students, <span className="text-indigo-600">for real learning.</span>
               </h1>
               <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-                Share, discover, and collaborate on study materials with thousands of students worldwide.
+                Stop wasting time searching. Download notes from students in your class who've already figured it out.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
                 <Link to="/signup" className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full sm:w-auto text-sm sm:text-base h-10 sm:h-12 px-6 sm:px-8 rounded-2xl">
-                    Get Started <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <Button size="lg" className="w-full sm:w-auto text-sm sm:text-base h-10 sm:h-12 px-6 sm:px-8 rounded-2xl flex items-center justify-center gap-2">
+                    Get Started <ArrowRight size={16} />
                   </Button>
                 </Link>
                 <Link to="/login" className="w-full sm:w-auto">
@@ -171,11 +212,7 @@ export function LandingPage() {
                   </Button>
                 </Link>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 sm:pt-6 grayscale opacity-50">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" className="h-3.5 sm:h-5" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM" className="h-3.5 sm:h-5" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix" className="h-3.5 sm:h-5" />
-              </div>
+
             </div>
           </div>
 
@@ -234,7 +271,7 @@ export function LandingPage() {
               <Card key={i} className="border-none bg-slate-50 rounded-2xl group">
                 <CardContent className="pt-6 sm:pt-8">
                   <div className={`${feature.color} w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform`}>
-                    <feature.icon className="h-6 w-6 sm:h-7 sm:w-7" />
+                    <feature.icon size={24} />
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2 sm:mb-3">{feature.title}</h3>
                   <p className="text-sm sm:text-base text-slate-600 leading-relaxed">{feature.description}</p>
@@ -253,34 +290,34 @@ export function LandingPage() {
           <div className="grid md:grid-cols-3 gap-4 sm:gap-6">
             {[
               {
-                name: 'Sarah Ahmed',
+                name: 'Bharti',
                 role: 'Engineering Student',
                 quote: 'Studiy helped me organize my notes and find resources I was struggling to find. My grades improved by 2 points!',
-                image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80',
+                image: 'https://api.dicebear.com/9.x/avataaars/svg?seed=',
                 rating: 5
               },
               {
-                name: 'Marcus Chen',
-                role: 'Medical Student',
+                name: 'Ishan Yadav',
+                role: 'CSE Student',
                 quote: 'The community is amazing. I got help from senior students and now I am also mentoring juniors here.',
-                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80',
-                rating: 5
+                image: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Sadie',
+                rating: 4
               },
               {
-                name: 'Priya Sharma',
-                role: 'Law Student',
+                name: 'Ishika Attrey',
+                role: 'Engineering Student',
                 quote: 'The verified resources saved me so much time researching. I recommend Studiy to all my friends now.',
-                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80',
-                rating: 5
+                image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Anjali',
+                rating: 4
               },
             ].map((testimonial, i) => (
-              <Card key={i} className="border-none rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                  <div className="flex items-center space-x-3 sm:space-x-4">
+              <Card key={i} className="border-none bg-slate-50 rounded-2xl group">
+                <CardContent className="pt-6 sm:pt-8 p-4 sm:p-6 space-y-3 sm:space-y-4">
+                  <div className="flex flex-col items-center text-center space-y-3">
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover"
                       referrerPolicy="no-referrer"
                     />
                     <div>
@@ -288,7 +325,7 @@ export function LandingPage() {
                       <p className="text-xs sm:text-sm text-slate-600">{testimonial.role}</p>
                     </div>
                   </div>
-                  <div className="flex space-x-1">
+                  <div className="flex justify-center space-x-1">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <span key={i} className="text-yellow-400 text-xs sm:text-sm">★</span>
                     ))}
@@ -354,9 +391,9 @@ export function LandingPage() {
                     color: 'text-purple-600'
                   },
                 ].map((item, i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 sm:p-8">
+                  <div key={i} className="bg-white rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center">
                     <div className={`${item.color} mb-4`}>
-                      <item.Icon className="h-8 w-8 sm:h-10 sm:w-10" />
+                      <item.Icon size={32} />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
                     <p className="text-sm sm:text-base text-slate-600">{item.desc}</p>
