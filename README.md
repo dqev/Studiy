@@ -1,7 +1,7 @@
 # Studiy - Student Resource Hub
 
 <div align="center">
-  ![Studiy Preview](public/og-image.svg)
+  ![Studiy Preview](public/og-image.png)
   
   **The ultimate hub for student resources**
   
