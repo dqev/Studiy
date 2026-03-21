@@ -20,7 +20,7 @@ export function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center space-x-2">
             <img
-              src="/icon.png"
+              src="/favicon.svg"
               alt="Studiy Logo"
               className="h-5 w-5 rounded-lg"
             />

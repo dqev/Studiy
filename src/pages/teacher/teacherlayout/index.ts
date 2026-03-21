@@ -1,0 +1,1 @@
+export { TeacherLayoutPage } from './TeacherLayoutPage';

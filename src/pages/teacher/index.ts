@@ -1,0 +1,9 @@
+export { TeacherDashboard } from './TeacherDashboard';
+export { TeacherHomepage } from './TeacherHomepage';
+export { TeacherMaterials } from './TeacherMaterials';
+export { TeacherMyClasses } from './TeacherMyClasses';
+export { TeacherStudentProgress } from './TeacherStudentProgress';
+export { TeacherNotifications } from './TeacherNotifications';
+export { TeacherProfile } from './TeacherProfile';
+export { TeacherSettings } from './TeacherSettings';
+export { TeacherPendingMaterial } from './TeacherPendingMaterial';

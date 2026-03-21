@@ -1,6 +1,7 @@
 // User Types
 export enum UserRole {
   USER = 'user',
+  TEACHER = 'teacher',
   ADMIN = 'admin',
 }
 

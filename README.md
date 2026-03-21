@@ -1,9 +1,7 @@
 # Studiy - Student Resource Hub
 
 <div align="center">
-  <img src="public/icon.png" alt="Studiy Logo" width="120" height="120" style="border-radius: 20px; margin: 20px 0;" />
-  
-  ![Studiy Preview](public/og-image.png)
+  ![Studiy Preview](public/og-image.svg)
   
   **The ultimate hub for student resources**
   

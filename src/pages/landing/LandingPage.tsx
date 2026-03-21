@@ -84,9 +84,9 @@ export function LandingPage() {
           <div className="flex justify-between h-14 sm:h-16 items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="/icon.png"
+                src="favicon/favicon.svg"
                 alt="Studiy Logo"
-                className="h-6 sm:h-5 w-6 sm:w-5 "
+                className="h-8 sm:h-7 w-8 sm:w-7 "
               />
               <span className="text-[21px] sm:text-xl font-bold text-slate-900 tracking-tight">Studiy</span>
             </Link>

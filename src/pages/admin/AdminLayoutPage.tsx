@@ -9,7 +9,8 @@ import {
     Settings,
     LogOut,
     Shield,
-    User
+    User,
+    Award
 } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { useAdminRouteProtection } from '@/src/hooks/useRouteProtection';
@@ -20,6 +21,7 @@ const adminNavItems = [
     { name: 'Dashboard', href: '/admin', icon: BarChart3 },
     { name: 'Profile', href: '/admin/profile', icon: User },
     { name: 'Manage Users', href: '/admin/users', icon: Users },
+    { name: 'Manage Teachers', href: '/admin/teachers', icon: Award },
     { name: 'Manage Resources', href: '/admin/resources', icon: Files },
     { name: 'Approvals', href: '/admin/approvals', icon: CheckCircle2 },
     { name: 'Reports', href: '/admin/reports', icon: AlertCircle },
@@ -82,9 +84,9 @@ export function AdminLayoutPage() {
                 <div className="p-5">
                     <div className="flex items-center space-x-2">
                         <img
-                            src="/icon.png"
+                            src="favicon/favicon.svg"
                             alt="Studiy Logo"
-                            className="h-5 w-5 rounded-lg"
+                            className="h-7 w-7 rounded-lg"
                         />
                         <div>
                             <h1 className="text-xl font-bold">Admin</h1>

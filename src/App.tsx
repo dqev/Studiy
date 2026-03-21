@@ -25,11 +25,24 @@ import { CreateLostAndFinderItem } from '@/src/pages/user/CreateLostAndFinderIte
 import { LostAndFinderDetail } from '@/src/pages/user/LostAndFinderDetail';
 import { ClassMaterial } from '@/src/pages/user/ClassMaterial';
 
+// Teacher Pages & Layout
+import { TeacherLayoutPage } from '@/src/pages/teacher/teacherlayout/TeacherLayoutPage';
+import { TeacherHomepage } from '@/src/pages/teacher/TeacherHomepage';
+import { TeacherDashboard } from '@/src/pages/teacher/TeacherDashboard';
+import { TeacherMaterials } from '@/src/pages/teacher/TeacherMaterials';
+import { TeacherMyClasses } from '@/src/pages/teacher/TeacherMyClasses';
+import { TeacherStudentProgress } from '@/src/pages/teacher/TeacherStudentProgress';
+import { TeacherNotifications } from '@/src/pages/teacher/TeacherNotifications';
+import { TeacherProfile } from '@/src/pages/teacher/TeacherProfile';
+import { TeacherSettings } from '@/src/pages/teacher/TeacherSettings';
+import { TeacherPendingMaterial } from '@/src/pages/teacher/TeacherPendingMaterial';
+
 // Admin Pages & Layout
 import { AdminLayoutPage } from '@/src/pages/admin/AdminLayoutPage';
 import { AdminProfile } from '@/src/pages/admin/AdminProfile';
 import { AdminDashboard } from '@/src/pages/admin/AdminDashboard';
 import { AdminUsers } from '@/src/pages/admin/AdminUsers';
+import { AdminTeachers } from '@/src/pages/admin/AdminTeachers';
 import { AdminResources } from '@/src/pages/admin/AdminResources';
 import { AdminRequests } from '@/src/pages/admin/AdminRequests';
 import { AdminReports } from '@/src/pages/admin/AdminReports';
@@ -64,6 +77,8 @@ function AppContent() {
           // User just logged in - redirect to dashboard/admin
           if (user?.role === UserRole.ADMIN) {
             navigate('/admin', { replace: true });
+          } else if (user?.role === UserRole.TEACHER) {
+            navigate('/teacher', { replace: true });
           } else {
             navigate('/user', { replace: true });
           }
@@ -119,11 +134,26 @@ function AppContent() {
         <Route path="/:username" element={<UserProfile />} />
       </Route>
 
+      {/* Teacher Routes */}
+      <Route element={<TeacherLayoutPage />}>
+        <Route path="/teacher" element={<TeacherHomepage />} />
+        <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+        <Route path="/teacher/materials" element={<TeacherMaterials />} />
+        <Route path="/teacher/my-classes" element={<TeacherMyClasses />} />
+        <Route path="/teacher/student-progress" element={<TeacherStudentProgress />} />
+        <Route path="/teacher/pending" element={<TeacherPendingMaterial />} />
+        <Route path="/teacher/notifications" element={<TeacherNotifications />} />
+        <Route path="/teacher/profile" element={<TeacherProfile />} />
+        <Route path="/teacher/settings" element={<TeacherSettings />} />
+        <Route path="/teacher/upload" element={<UserUpload />} />
+      </Route>
+
       {/* Admin Routes */}
       <Route element={<AdminLayoutPage />}>
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/profile" element={<AdminProfile />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/teachers" element={<AdminTeachers />} />
         <Route path="/admin/resources" element={<AdminResources />} />
         <Route path="/admin/approvals" element={<AdminRequests />} />
         <Route path="/admin/reports" element={<AdminReports />} />

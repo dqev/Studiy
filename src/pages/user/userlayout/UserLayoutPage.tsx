@@ -81,7 +81,7 @@ export function UserLayoutPage() {
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center gap-4">
                     <img
-                        src="/icon.png"
+                        src="favicon/favicon.svg"
                         alt="Loading"
                         className="h-10 w-10 animate-spin"
                     />
@@ -99,6 +99,11 @@ export function UserLayoutPage() {
     // Redirect admin users to admin layout
     if (user?.role === UserRole.ADMIN) {
         return <Navigate to="/admin" replace />;
+    }
+
+    // Redirect teacher users to teacher layout
+    if (user?.role === UserRole.TEACHER) {
+        return <Navigate to="/teacher" replace />;
     }
 
     const handleLogout = async () => {
@@ -142,12 +147,12 @@ export function UserLayoutPage() {
                 <div className="p-5">
                     <button
                         onClick={() => navigate('/user')}
-                        className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                        className="flex items-center space-x-1 hover:opacity-80 transition-opacity"
                     >
                         <img
-                            src="/icon.png"
+                            src="favicon/favicon.svg"
                             alt="Studiy Logo"
-                            className="h-5 w-5 rounded-lg"
+                            className="h-7 w-7 rounded-lg"
                         />
                         <h1 className="text-xl font-bold text-slate-900">Studiy</h1>
                     </button>

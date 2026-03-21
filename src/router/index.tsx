@@ -21,11 +21,24 @@ import { CampusLostAndFinder } from '@/src/pages/user/CampusLostAndFinder';
 import { CreateLostAndFinderItem } from '@/src/pages/user/CreateLostAndFinderItem';
 import { LostAndFinderDetail } from '@/src/pages/user/LostAndFinderDetail';
 
+// Teacher Pages
+import { TeacherLayoutPage } from '@/src/pages/teacher/teacherlayout/TeacherLayoutPage';
+import { TeacherHomepage } from '@/src/pages/teacher/TeacherHomepage';
+import { TeacherDashboard } from '@/src/pages/teacher/TeacherDashboard';
+import { TeacherMaterials } from '@/src/pages/teacher/TeacherMaterials';
+import { TeacherMyClasses } from '@/src/pages/teacher/TeacherMyClasses';
+import { TeacherStudentProgress } from '@/src/pages/teacher/TeacherStudentProgress';
+import { TeacherNotifications } from '@/src/pages/teacher/TeacherNotifications';
+import { TeacherProfile } from '@/src/pages/teacher/TeacherProfile';
+import { TeacherSettings } from '@/src/pages/teacher/TeacherSettings';
+import { TeacherPendingMaterial } from '@/src/pages/teacher/TeacherPendingMaterial';
+
 // Admin Pages
 import { AdminLayoutPage } from '@/src/pages/admin/AdminLayoutPage';
 import { AdminDashboard } from '@/src/pages/admin/AdminDashboard';
 import { AdminProfile } from '@/src/pages/admin/AdminProfile';
 import { AdminUsers } from '@/src/pages/admin/AdminUsers';
+import { AdminTeachers } from '@/src/pages/admin/AdminTeachers';
 import { AdminResources } from '@/src/pages/admin/AdminResources';
 import { AdminRequests } from '@/src/pages/admin/AdminRequests';
 import { AdminReports } from '@/src/pages/admin/AdminReports';
@@ -83,6 +96,24 @@ export const router = createBrowserRouter([
       { path: 'lost-and-finder/:itemId', element: <LostAndFinderDetail /> },
     ],
   },
+  // Teacher Routes
+  {
+    path: '/teacher',
+    element: <TeacherLayoutPage />,
+    children: [
+      { path: '', element: <TeacherHomepage /> },
+      { index: true, element: <TeacherDashboard /> },
+      { path: 'dashboard', element: <TeacherDashboard /> },
+      { path: 'materials', element: <TeacherMaterials /> },
+      { path: 'my-classes', element: <TeacherMyClasses /> },
+      { path: 'student-progress', element: <TeacherStudentProgress /> },
+      { path: 'pending', element: <TeacherPendingMaterial /> },
+      { path: 'notifications', element: <TeacherNotifications /> },
+      { path: 'profile', element: <TeacherProfile /> },
+      { path: 'settings', element: <TeacherSettings /> },
+      { path: 'upload', element: <UserUpload /> },
+    ],
+  },
   // Admin Routes
   {
     path: '/admin',
@@ -91,6 +122,7 @@ export const router = createBrowserRouter([
       { index: true, element: <AdminDashboard /> },
       { path: 'profile', element: <AdminProfile /> },
       { path: 'users', element: <AdminUsers /> },
+      { path: 'teachers', element: <AdminTeachers /> },
       { path: 'resources', element: <AdminResources /> },
       { path: 'approvals', element: <AdminRequests /> },
       { path: 'reports', element: <AdminReports /> },
