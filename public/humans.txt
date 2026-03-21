@@ -1,0 +1,27 @@
+/* TEAM */
+Owner: Dev Chauhan
+Contact: dev@studiy.vercel.app
+Location: India
+
+/* SITE */
+Last Updated: 2026-03-21
+Language: English
+Charset: UTF-8
+Standards: HTML5, CSS3, JavaScript ES6+
+
+/* TECHNOLOGY */
+Framework: React 18+
+Language: TypeScript
+Styling: Tailwind CSS
+Database: Firebase/Firestore
+Backend: Firebase Functions
+Hosting: Vercel
+Icons: React Icons, Lucide React
+Authentication: Firebase Auth
+
+/* SOCIAL */
+Twitter: @studiy_app
+GitHub: devchauhann/studiy
+
+/* THANKS */
+Thanks to all our contributors and the amazing open-source community!

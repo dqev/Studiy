@@ -1,0 +1,19 @@
+Contact: security@studiy.vercel.app
+Expires: 2027-03-21T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://studiy.vercel.app/.well-known/security.txt
+Policy: https://studiy.vercel.app/legal/privacy-policy
+
+# Security Policy
+# Please report security vulnerabilities responsibly to security@studiy.vercel.app
+# We take all security concerns seriously and will respond within 48 hours.
+
+# Responsible Disclosure Guidelines:
+# 1. Do not publicly disclose the vulnerability before we have a chance to fix it
+# 2. Give us reasonable time to address the issue (at least 30 days)
+# 3. Do not access, modify, or delete user data
+# 4. Do not disrupt service or perform denial-of-service attacks
+# 5. Do not use security testing tools that could negatively impact the service
+
+# For more information about responsible disclosure, visit:
+# https://bugcrowd.com/vulnerability-disclosure-guidelines
