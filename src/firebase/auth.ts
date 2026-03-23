@@ -492,3 +492,31 @@ export const loginWithUsernameOrEmail = async (emailOrUsername: string, password
   }
 };
 
+// Update user onboarding status and save onboarding responses
+export const updateUserOnboardingStatus = async (
+  userId: string,
+  completed: boolean,
+  data: any
+): Promise<void> => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await setDoc(userRef, {
+      onboarding_status: completed,
+      onboarding_data: data,
+      updated_at: new Date().toISOString()
+    }, { merge: true });
+
+    // Update cached user in localStorage
+    const cachedUser = localStorage.getItem('cachedUser');
+    if (cachedUser) {
+      const user = JSON.parse(cachedUser);
+      user.onboarding_status = completed;
+      user.onboarding_data = data;
+      localStorage.setItem('cachedUser', JSON.stringify(user));
+    }
+  } catch (error) {
+    console.error('Error updating onboarding status:', error);
+    throw error;
+  }
+};
+

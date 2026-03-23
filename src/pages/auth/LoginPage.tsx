@@ -22,7 +22,14 @@ export function LoginPage() {
 
     try {
       await login(email, password);
-      navigate('/user');
+      // Navigate to onboarding if not completed, otherwise to user dashboard
+      const userJson = localStorage.getItem('cachedUser');
+      const user = userJson ? JSON.parse(userJson) : null;
+      if (user && !user.onboarding_status) {
+        navigate('/onboarding');
+      } else {
+        navigate('/user');
+      }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Login failed. Please check your credentials.';
       setError(errorMsg);
@@ -33,7 +40,14 @@ export function LoginPage() {
     setError('');
     try {
       await loginGoogle();
-      navigate('/user');
+      // Navigate to onboarding if not completed, otherwise to user dashboard
+      const userJson = localStorage.getItem('cachedUser');
+      const user = userJson ? JSON.parse(userJson) : null;
+      if (user && !user.onboarding_status) {
+        navigate('/onboarding');
+      } else {
+        navigate('/user');
+      }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Google login failed. Please try again.';
       setError(errorMsg);

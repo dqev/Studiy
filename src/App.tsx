@@ -54,6 +54,7 @@ import { LoginPage } from '@/src/pages/auth/LoginPage';
 import { SignupPage } from '@/src/pages/auth/SignupPage';
 import { EmailVerificationPage } from '@/src/pages/auth/EmailVerificationPage';
 import { ForgotPasswordPage } from '@/src/pages/auth/ForgotPasswordPage';
+import { OnboardingPage } from '@/src/pages/onboarding/OnboardingPage';
 import { TermsOfService } from '@/src/pages/legal/TermsOfService';
 import { PrivacyPolicy } from '@/src/pages/legal/PrivacyPolicy';
 import { PlaceholderPage } from '@/src/components/common/PlaceholderPage';
@@ -112,6 +113,7 @@ function AppContent() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/auth/verify-email" element={<EmailVerificationPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
       </Route>
 
       {/* User Routes */}

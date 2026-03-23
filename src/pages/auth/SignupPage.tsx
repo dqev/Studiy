@@ -258,7 +258,10 @@ export function SignupPage() {
     try {
       await signup(email, password, username);
       setVerificationEmail(email);
-      setSignupSuccess(true);
+      // Redirect to onboarding instead of showing success message
+      setTimeout(() => {
+        navigate('/onboarding');
+      }, 500);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Signup failed. Please try again.';
       setError(errorMsg);

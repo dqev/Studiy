@@ -49,6 +49,7 @@ import { LandingPage } from '@/src/pages/landing/LandingPage';
 import { LoginPage } from '@/src/pages/auth/LoginPage';
 import { SignupPage } from '@/src/pages/auth/SignupPage';
 import { ForgotPasswordPage } from '@/src/pages/auth/ForgotPasswordPage';
+import { OnboardingPage } from '@/src/pages/onboarding/OnboardingPage';
 
 import { PlaceholderPage } from '@/src/components/common/PlaceholderPage';
 
@@ -71,6 +72,7 @@ export const router = createBrowserRouter([
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
       { path: 'forgot-password', element: <ForgotPasswordPage /> },
+      { path: 'onboarding', element: <OnboardingPage /> },
     ],
   },
   // User Routes

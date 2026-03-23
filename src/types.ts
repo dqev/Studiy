@@ -5,6 +5,12 @@ export enum UserRole {
   ADMIN = 'admin',
 }
 
+export interface OnboardingData {
+  name: string;
+  useCase: 'work' | 'hobby' | 'education' | null;
+  usageMode: 'solo' | 'team' | null;
+}
+
 export interface User {
   id: string;
   google_id: string;
@@ -15,6 +21,8 @@ export interface User {
   profile_picture?: string;
   displayName?: string;
   password?: string; // For email/password signup
+  onboarding_status?: boolean; // Track if user has completed onboarding
+  onboarding_data?: OnboardingData; // Store onboarding responses
 }
 
 // Material/Resource Types
